@@ -31,10 +31,16 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+.env
 
 # vercel
 .vercel
+
+# cloudflare / opennext
+.open-next
+.wrangler
+.dev.vars
+cf-workers-dev.mp4
 
 # typescript
 *.tsbuildinfo

@@ -1,0 +1,7 @@
+.next/
+node_modules/
+bun.lock
+.turbo/
+dist/
+build/
+

@@ -1,0 +1,12 @@
+name = "francys-portofolio"
+main = ".open-next/worker.js"
+compatibility_date = "2026-08-01"
+compatibility_flags = ["nodejs_compat"]
+
+assets = { directory = ".open-next/assets", binding = "ASSETS" }
+
+# Set these as encrypted secrets / vars in the Cloudflare dashboard or via:
+#   wrangler secret put NEXT_PUBLIC_SUPABASE_URL
+#   wrangler secret put NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+#   wrangler secret put NEXT_PUBLIC_SITE_URL
+# (NEXT_PUBLIC_* are inlined at build time, so also set them as build env vars)

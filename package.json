@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "echo '==> Linting...' && echo '==> Prettying...' && prettier --write \"app/**/*.{ts,tsx,js,jsx,css}\" \"components/**/*.{ts,tsx,js,jsx,css}\" \"lib/**/*.{ts,tsx,js,jsx,css}\" \"utils/**/*.{ts,tsx,js,jsx,css}\" && TYPESCRIPT_ESLINT_SKIP_COMPAT_CHECK=true eslint && next dev",
+    "dev": "echo '==> Linting...' && TYPESCRIPT_ESLINT_SKIP_COMPAT_CHECK=true eslint  && echo '==> Prettying...' && prettier --write \"app/**/*.{ts,tsx,js,jsx,css}\" \"components/**/*.{ts,tsx,js,jsx,css}\" \"lib/**/*.{ts,tsx,js,jsx,css}\" \"utils/**/*.{ts,tsx,js,jsx,css}\" && next dev",
     "build": "next build",
     "start": "next start",
+    "cf:build": "opennextjs-cloudflare build",
+    "cf:dev": "opennextjs-cloudflare build && wrangler dev",
+    "deploy": "opennextjs-cloudflare build && wrangler deploy",
     "lint": "TYPESCRIPT_ESLINT_SKIP_COMPAT_CHECK=true eslint"
   },
   "dependencies": {
@@ -30,6 +33,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^1.20.3",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^20.19.43",
     "@types/react": "^19.2.18",
@@ -38,7 +42,8 @@
     "eslint-config-next": "16.3.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.68.0"
+    "typescript-eslint": "^8.68.0",
+    "wrangler": "^4.126.0"
   },
   "packageManager": "pnpm@11.3.0",
   "pnpm": {
