@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "echo '==> Linting...' && TYPESCRIPT_ESLINT_SKIP_COMPAT_CHECK=true eslint  && echo '==> Prettying...' && prettier --write \"app/**/*.{ts,tsx,js,jsx,css}\" \"components/**/*.{ts,tsx,js,jsx,css}\" \"lib/**/*.{ts,tsx,js,jsx,css}\" \"utils/**/*.{ts,tsx,js,jsx,css}\" && next dev",
-    "build": "opennextjs-cloudflare build",
+    "build": "next build",
     "start": "next start",
     "cf:build": "opennextjs-cloudflare build",
     "cf:dev": "opennextjs-cloudflare build && wrangler dev",
