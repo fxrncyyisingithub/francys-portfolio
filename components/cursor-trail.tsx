@@ -46,8 +46,8 @@ export default function CursorTrail() {
       const container = containerEl!;
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
-      smoothRef.current.x += (mx - smoothRef.current.x) * 0.2;
-      smoothRef.current.y += (my - smoothRef.current.y) * 0.2;
+      smoothRef.current.x += (mx - smoothRef.current.x) * 0.12;
+      smoothRef.current.y += (my - smoothRef.current.y) * 0.12;
 
       const cx = smoothRef.current.x;
       const cy = smoothRef.current.y;
