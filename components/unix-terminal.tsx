@@ -87,7 +87,10 @@ export default function UnixTerminal() {
   async function run(raw: string, echo = true) {
     const cmd = raw.trim();
     if (echo) {
-      setLines((l) => [...l, { kind: "input", text: `francy@portfolio:~$ ${cmd}` }]);
+      setLines((l) => [
+        ...l,
+        { kind: "input", text: `francy@portfolio:~$ ${cmd}` },
+      ]);
     }
     if (!cmd) return;
 
@@ -124,7 +127,9 @@ export default function UnixTerminal() {
         const current = node && node.type === "file" ? node.content : "";
         fsRef.current.children[file] = {
           type: "file",
-          content: append ? current + (current && !current.endsWith("\n") ? "\n" : "") + text : text,
+          content: append
+            ? current + (current && !current.endsWith("\n") ? "\n" : "") + text
+            : text,
         };
         return;
       }
@@ -147,14 +152,16 @@ export default function UnixTerminal() {
     if (name === "touch") {
       const file = args[0];
       if (!file) return push("touch: missing file operand");
-      if (fsRef.current.children[file]) return push(`touch: ${file}: already exists`);
+      if (fsRef.current.children[file])
+        return push(`touch: ${file}: already exists`);
       fsRef.current.children[file] = { type: "file", content: "" };
       return;
     }
     if (name === "mkdir") {
       const dir = args[0];
       if (!dir) return push("mkdir: missing operand");
-      if (fsRef.current.children[dir]) return push(`mkdir: ${dir}: already exists`);
+      if (fsRef.current.children[dir])
+        return push(`mkdir: ${dir}: already exists`);
       fsRef.current.children[dir] = { type: "dir", children: {} };
       return;
     }
@@ -182,7 +189,8 @@ export default function UnixTerminal() {
       }
     }
     if (name === "rm") {
-      const recursive = args[0] === "-r" || args[0] === "-rf" || args[0] === "-fr";
+      const recursive =
+        args[0] === "-r" || args[0] === "-rf" || args[0] === "-fr";
       const target = recursive ? args[1] : args[0];
       if (!target) return push("rm: missing operand");
       const node = fsRef.current.children[target];
@@ -197,7 +205,9 @@ export default function UnixTerminal() {
       if (!url) {
         return push("curl: try 'curl api.francy.dev/v1/whoami'");
       }
-      const match = url.match(/^api\.francy\.dev\/v1\/(whoami|skills|projects)$/);
+      const match = url.match(
+        /^api\.francy\.dev\/v1\/(whoami|skills|projects)$/,
+      );
       if (!match) {
         return push(
           "curl: only api.francy.dev/v1/{whoami,skills,projects} are supported",
@@ -223,12 +233,12 @@ export default function UnixTerminal() {
 
   return (
     <div
-      className="w-full min-h-screen flex flex-col items-start justify-center px-6 sm:px-12 lg:px-20 py-16 cursor-text"
+      className="fixed inset-0 z-10 w-full h-screen flex flex-col items-start px-6 sm:px-12 lg:px-20 py-6 cursor-text bg-black"
       onClick={() => inputRef.current?.focus()}
     >
       <div
         ref={scrollRef}
-        className="w-full max-h-[80vh] overflow-y-auto font-mono text-base sm:text-xl leading-relaxed whitespace-pre-wrap break-words"
+        className="w-full flex-1 min-h-0 overflow-y-auto font-mono text-base sm:text-xl leading-relaxed whitespace-pre-wrap break-words"
       >
         {lines.map((line, i) => (
           <div

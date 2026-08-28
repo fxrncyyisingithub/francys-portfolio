@@ -27,7 +27,7 @@ export default async function Page() {
   const projectsFallback = projects.length ? projects : { projects: [] };
 
   return (
-    <main className="bg-black text-white min-h-screen w-full font-mono selection:bg-white selection:text-black">
+    <main className="text-white min-h-screen w-full font-mono selection:bg-white selection:text-black relative z-10">
       {/* First fold - fullscreen */}
       <section className="relative min-h-screen w-full flex flex-col">
         {/* Header */}
@@ -35,7 +35,7 @@ export default async function Page() {
           <TerminalTitle />
           <a
             href="/terminal"
-            className="text-[12px] sm:text-[13px] tracking-tight opacity-80 hover:opacity-100 transition-opacity mt-2"
+            className="text-lg sm:text-xl lg:text-2xl tracking-tight opacity-70 hover:opacity-100 transition-opacity duration-300 mt-2"
           >
             [ terminal ]
           </a>
@@ -43,10 +43,10 @@ export default async function Page() {
 
         {/* Hero - scroll prompt at bottom */}
         <div className="flex-1 w-full flex flex-col items-center justify-end pb-16">
-          <p className="text-xl sm:text-3xl tracking-tight opacity-80">
+          <p className="text-lg sm:text-2xl tracking-tight opacity-60">
             [ scroll down for more ]
           </p>
-          <span className="mt-10 text-3xl sm:text-5xl font-light leading-none animate-pulse">
+          <span className="mt-10 text-3xl sm:text-5xl font-light leading-none animate-pulse opacity-70">
             ↓
           </span>
         </div>
@@ -54,23 +54,34 @@ export default async function Page() {
 
       {/* Terminal blocks - one per screen */}
       <section className="w-full flex flex-col items-center px-6">
-        <TerminalBlock
-          command="$ curl api.francy.dev/v1/whoami"
-          endpoint="/api/v1/whoami"
-          fallbackData={whoamiFallback}
-        />
+        <div className="w-full max-w-4xl">
+          <TerminalBlock
+            title="About"
+            command="$ curl api.francy.dev/v1/whoami"
+            endpoint="/api/v1/whoami"
+            fallbackData={whoamiFallback}
+          />
+        </div>
 
-        <TerminalBlock
-          command="$ curl api.francy.dev/v1/skills"
-          endpoint="/api/v1/skills"
-          fallbackData={skillsFallback}
-        />
+        <div className="divider max-w-4xl" />
+
+        <div className="w-full max-w-4xl">
+          <TerminalBlock
+            title="Skills"
+            command="$ curl api.francy.dev/v1/skills"
+            endpoint="/api/v1/skills"
+            fallbackData={skillsFallback}
+          />
+        </div>
+
+        <div className="divider max-w-4xl" />
 
         <div
           id="summary"
-          className="w-full flex flex-col items-center scroll-mt-20"
+          className="w-full flex flex-col items-center scroll-mt-20 max-w-4xl"
         >
           <TerminalBlock
+            title="Projects"
             command="$ curl api.francy.dev/v1/projects"
             endpoint="/api/v1/projects"
             fallbackData={projectsFallback}

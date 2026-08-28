@@ -22,6 +22,7 @@ type TerminalBlockProps = {
   endpoint: string;
   fallbackData: unknown;
   delay?: number;
+  title?: string;
 };
 
 export default function TerminalBlock({
@@ -29,6 +30,7 @@ export default function TerminalBlock({
   endpoint,
   fallbackData,
   delay = 0,
+  title,
 }: TerminalBlockProps) {
   const commandRef = useRef<HTMLSpanElement>(null);
   const [output, setOutput] = useState("");
@@ -124,6 +126,14 @@ export default function TerminalBlock({
       ref={containerRef}
       className="w-full min-h-screen flex flex-col items-start justify-center px-6 sm:px-12 lg:px-20 py-16"
     >
+      {title && (
+        <>
+          <div className="w-12 h-1 bg-white mb-6" />
+          <h2 className="font-mono text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight uppercase opacity-40 mb-8">
+            {title}
+          </h2>
+        </>
+      )}
       <div className="font-mono font-bold text-2xl sm:text-3xl lg:text-4xl leading-relaxed tracking-tight">
         <span ref={commandRef} className="whitespace-pre" />
         <span className="cursor">|</span>

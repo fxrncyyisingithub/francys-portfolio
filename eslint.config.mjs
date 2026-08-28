@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Deploy / build output from OpenNext (Cloudflare) and Vercel
+    ".open-next/**",
+    ".vercel/**",
+    ".wrangler/**",
+    "node_modules/**",
   ]),
 ]);
 

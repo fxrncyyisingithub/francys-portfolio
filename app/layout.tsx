@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/lenis";
+import CursorTrail from "@/components/cursor-trail";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <SmoothScroll />
+        <CursorTrail />
         {children}
       </body>
     </html>
