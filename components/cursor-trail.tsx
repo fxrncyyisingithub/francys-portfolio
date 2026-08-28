@@ -14,12 +14,12 @@ export default function CursorTrail() {
   const smoothRef = useRef({ x: -300, y: -300 });
 
   useEffect(() => {
-    const field = fieldRef.current;
-    const container = containerRef.current;
-    if (!field || !container) return;
+    const fieldElement = fieldRef.current;
+    const containerElement = containerRef.current;
+    if (!fieldElement || !containerElement) return;
 
     function buildField() {
-      field.innerHTML = "";
+      fieldElement.innerHTML = "";
       const cols = Math.ceil(window.innerWidth / COL_W) + 1;
       const rows = Math.ceil(window.innerHeight / ROW_H) + 1;
       const frag = document.createDocumentFragment();
@@ -33,7 +33,7 @@ export default function CursorTrail() {
           frag.appendChild(span);
         }
       }
-      field.appendChild(frag);
+      fieldElement.appendChild(frag);
     }
 
     buildField();
@@ -48,8 +48,8 @@ export default function CursorTrail() {
       const cy = smoothRef.current.y;
 
       const mask = `radial-gradient(circle 96px at ${cx}px ${cy}px, #000 0%, #000 55%, rgba(0,0,0,0.15) 82%, transparent 100%)`;
-      container.style.webkitMaskImage = mask;
-      container.style.maskImage = mask;
+      containerElement.style.webkitMaskImage = mask;
+      containerElement.style.maskImage = mask;
 
       rafRef.current = requestAnimationFrame(tick);
     }
@@ -78,7 +78,7 @@ export default function CursorTrail() {
       window.removeEventListener("resize", onResize);
       window.clearTimeout(resizeTimer);
       cancelAnimationFrame(rafRef.current);
-      field.innerHTML = "";
+      fieldElement.innerHTML = "";
     };
   }, []);
 
