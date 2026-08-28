@@ -14,12 +14,13 @@ export default function CursorTrail() {
   const smoothRef = useRef({ x: -300, y: -300 });
 
   useEffect(() => {
-    const fieldElement = fieldRef.current;
-    const containerElement = containerRef.current;
-    if (!fieldElement || !containerElement) return;
+    const fieldEl = fieldRef.current;
+    const containerEl = containerRef.current;
+    if (!fieldEl || !containerEl) return;
 
     function buildField() {
-      fieldElement.innerHTML = "";
+      const field = fieldEl!;
+      field.innerHTML = "";
       const cols = Math.ceil(window.innerWidth / COL_W) + 1;
       const rows = Math.ceil(window.innerHeight / ROW_H) + 1;
       const frag = document.createDocumentFragment();
@@ -33,12 +34,13 @@ export default function CursorTrail() {
           frag.appendChild(span);
         }
       }
-      fieldElement.appendChild(frag);
+      field.appendChild(frag);
     }
 
     buildField();
 
     function tick() {
+      const container = containerEl!;
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
       smoothRef.current.x += (mx - smoothRef.current.x) * 0.2;
@@ -48,8 +50,8 @@ export default function CursorTrail() {
       const cy = smoothRef.current.y;
 
       const mask = `radial-gradient(circle 96px at ${cx}px ${cy}px, #000 0%, #000 55%, rgba(0,0,0,0.15) 82%, transparent 100%)`;
-      containerElement.style.webkitMaskImage = mask;
-      containerElement.style.maskImage = mask;
+      container.style.webkitMaskImage = mask;
+      container.style.maskImage = mask;
 
       rafRef.current = requestAnimationFrame(tick);
     }
@@ -78,7 +80,7 @@ export default function CursorTrail() {
       window.removeEventListener("resize", onResize);
       window.clearTimeout(resizeTimer);
       cancelAnimationFrame(rafRef.current);
-      fieldElement.innerHTML = "";
+      fieldEl.innerHTML = "";
     };
   }, []);
 
