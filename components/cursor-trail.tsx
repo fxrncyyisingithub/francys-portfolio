@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 
 const CHARS = "0123456789{}[]();:=>+<>/\\|#@$%^&*~!?-_.,`'\"";
-const COL_W = 18;
-const ROW_H = 22;
+const COL_W = 26;
+const ROW_H = 30;
 
 export default function CursorTrail() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,6 +39,9 @@ export default function CursorTrail() {
 
     buildField();
 
+    let lastMx = -999;
+    let lastMy = -999;
+
     function tick() {
       const container = containerEl!;
       const mx = mouseRef.current.x;
@@ -49,9 +52,14 @@ export default function CursorTrail() {
       const cx = smoothRef.current.x;
       const cy = smoothRef.current.y;
 
-      const mask = `radial-gradient(circle 96px at ${cx}px ${cy}px, #000 0%, #000 55%, rgba(0,0,0,0.15) 82%, transparent 100%)`;
-      container.style.webkitMaskImage = mask;
-      container.style.maskImage = mask;
+      // only recompute the (expensive) mask when the cursor actually moved
+      if (Math.abs(cx - lastMx) > 1.5 || Math.abs(cy - lastMy) > 1.5) {
+        lastMx = cx;
+        lastMy = cy;
+        const mask = `radial-gradient(circle 96px at ${cx}px ${cy}px, #000 0%, #000 55%, rgba(0,0,0,0.15) 82%, transparent 100%)`;
+        container.style.webkitMaskImage = mask;
+        container.style.maskImage = mask;
+      }
 
       rafRef.current = requestAnimationFrame(tick);
     }

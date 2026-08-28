@@ -46,7 +46,7 @@ export default function TerminalBlock({
           setStarted(true);
         }
       },
-      { threshold: 0.5, rootMargin: "0px 0px -25% 0px" },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
     );
 
     if (containerRef.current) observer.observe(containerRef.current);
