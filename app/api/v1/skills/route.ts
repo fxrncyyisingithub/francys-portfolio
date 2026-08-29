@@ -9,5 +9,5 @@ export async function GET() {
   if (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
-  return new Response(JSON.stringify(data, null, 3));
+  return new Response(JSON.stringify(data, null, 2));
 }

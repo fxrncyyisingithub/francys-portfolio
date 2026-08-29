@@ -10,7 +10,7 @@ export async function GET() {
   if (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
-  const goodData = JSON.stringify(data, null, 3);
+  const goodData = JSON.stringify(data, null, 2);
   return new Response(goodData, {
     headers: {
       "Content-Type": "application/json",
