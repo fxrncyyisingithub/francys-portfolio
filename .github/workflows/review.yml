@@ -1,0 +1,72 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get PR diff
+        run: |
+          git diff \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.event.pull_request.head.sha }}" \
+            > diff.txt
+
+      - name: AI Review
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          DIFF=$(cat diff.txt)
+
+          if [ -z "$DIFF" ]; then
+            echo "No changes to review."
+            exit 0
+          fi
+
+          jq -n \
+            --arg diff "$DIFF" \
+            '{
+              model: "deepseek/deepseek-v4-flash-0731",
+              messages: [
+                {
+                  role: "system",
+                  content: "You are a strict senior software engineer performing a code review. Review only the provided Git diff. Look for real bugs, security vulnerabilities, regressions, incorrect logic, performance problems, and serious maintainability issues. Do not complain about formatting, comments, naming preferences, or harmless stylistic choices. If there are no meaningful issues, return exactly LGTM."
+                },
+                {
+                  role: "user",
+                  content: ("Review this Git diff:\n\n" + $diff)
+                }
+              ]
+            }' > request.json
+
+          RESPONSE=$(curl -s https://openrouter.ai/api/v1/chat/completions \
+            -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d @request.json)
+
+          REVIEW=$(echo "$RESPONSE" | jq -r '.choices[0].message.content')
+
+          echo "$REVIEW" > review.txt
+
+          echo "===== AI REVIEW ====="
+          cat review.txt
+
+      - name: Comment on PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --body "$(cat review.txt)"
