@@ -59,7 +59,7 @@ export default async function Page() {
             title="About"
             command="$ curl api.francy.dev/v1/whoami"
             endpoint="/api/v1/whoami"
-            fallbackData={whoamiFallback}
+            fallbackData={`[]`}
           />
         </div>
 
@@ -70,7 +70,7 @@ export default async function Page() {
             title="Skills"
             command="$ curl api.francy.dev/v1/skills"
             endpoint="/api/v1/skills"
-            fallbackData={skillsFallback}
+            fallbackData={`[]`}
           />
         </div>
 
@@ -84,7 +84,7 @@ export default async function Page() {
             title="Projects"
             command="$ curl api.francy.dev/v1/projects"
             endpoint="/api/v1/projects"
-            fallbackData={projectsFallback}
+            fallbackData={`[]`}
           />
         </div>
       </section>
