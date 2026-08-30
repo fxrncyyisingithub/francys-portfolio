@@ -4,7 +4,6 @@ import { createClient } from "@/utils/supabase/server";
 export async function GET() {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
-
   const { data, error } = await supabase.from("skills").select("*");
   if (error) {
     return Response.json({ error: error.message }, { status: 500 });

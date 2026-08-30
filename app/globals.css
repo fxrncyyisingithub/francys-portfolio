@@ -30,7 +30,6 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 
-  /* subtle top glow */
   background-image: radial-gradient(
     ellipse 70% 45% at 50% -8%,
     rgba(255, 255, 255, 0.05),

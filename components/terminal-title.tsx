@@ -17,7 +17,7 @@ export default function TerminalTitle() {
         clearInterval(id);
         setDone(true);
       }
-    }, 90);
+    }, 75);
     return () => clearInterval(id);
   }, []);
 

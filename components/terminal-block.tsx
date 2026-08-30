@@ -39,82 +39,86 @@ export default function TerminalBlock({
   const playedRef = useRef(false);
   const tweensRef = useRef<gsap.core.Tween[]>([]);
 
+  // Fixed IntersectionObserver: disconnects immediately on trigger, reliable low threshold
   useEffect(() => {
+    if (started) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !started) {
+        if (entry.isIntersecting) {
           setStarted(true);
+          observer.disconnect();
         }
       },
-      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
+      { threshold: 0.05 },
     );
 
-    if (containerRef.current) observer.observe(containerRef.current);
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
 
     return () => observer.disconnect();
   }, [started]);
 
+  // GSAP Typing Effect Loop
   useEffect(() => {
     if (!started || playedRef.current) return;
     playedRef.current = true;
 
+    let isMounted = true;
+
     const timeout = setTimeout(() => {
       const obj = { chars: 0 };
 
-      tweensRef.current.push(
-        gsap.to(obj, {
-          chars: command.length,
-          duration: 0.9,
-          ease: "none",
-          onUpdate: () => {
-            if (commandRef.current) {
-              commandRef.current.textContent = command.slice(
-                0,
-                Math.floor(obj.chars),
-              );
-            }
-          },
-          onComplete: async () => {
-            let data: unknown = fallbackData;
-            try {
-              const json = await fetchOnce(endpoint);
-              if (json) {
-                // API returns array for Supabase, normalize to object shape like figma
-                // fallbackData already has correct shape, only override if json is meaningful
-                if (Array.isArray(json) && json.length > 0) {
-                  // whoami: array -> keep as is for pretty print, terminal expects array
-                  data = json;
-                } else if (json && typeof json === "object") {
-                  // could be already shaped
-                  const isEmptyArray =
-                    Array.isArray((json as Record<string, unknown>).data) &&
-                    ((json as Record<string, unknown>).data as unknown[])
-                      .length === 0;
-                  data = isEmptyArray ? fallbackData : json;
-                }
-              }
-            } catch {
-              // keep fallback
-            }
-
-            const pretty = JSON.stringify(data, null, 2);
-            const out = { chars: 0 };
-            tweensRef.current.push(
-              gsap.to(out, {
-                chars: pretty.length,
-                duration: 2.2,
-                ease: "none",
-                onUpdate: () => {
-                  setOutput(pretty.slice(0, Math.floor(out.chars)));
-                },
-              }),
+      const commandTween = gsap.to(obj, {
+        chars: command.length,
+        duration: 1.0,
+        ease: "none",
+        onUpdate: () => {
+          if (commandRef.current) {
+            commandRef.current.textContent = command.slice(
+              0,
+              Math.floor(obj.chars),
             );
-          },
-        }),
-      );
+          }
+        },
+        onComplete: async () => {
+          let data: unknown = fallbackData;
+
+          try {
+            const json = await fetchOnce(endpoint);
+            if (json !== null && json !== undefined) {
+              data = json;
+            }
+          } catch {
+            data = fallbackData;
+          }
+
+          if (!isMounted) return;
+
+          const pretty = JSON.stringify(data, null, 2) || "";
+          const out = { chars: 0 };
+
+          const outputTween = gsap.to(out, {
+            chars: pretty.length,
+            duration: 2.2,
+            ease: "none",
+            onUpdate: () => {
+              if (isMounted) {
+                setOutput(pretty.slice(0, Math.floor(out.chars)));
+              }
+            },
+          });
+
+          tweensRef.current.push(outputTween);
+        },
+      });
+
+      tweensRef.current.push(commandTween);
     }, delay);
 
     return () => {
+      isMounted = false;
       clearTimeout(timeout);
       tweensRef.current.forEach((t) => t.kill());
       tweensRef.current = [];
