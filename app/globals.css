@@ -81,6 +81,26 @@ body::before {
   }
 }
 
+@keyframes bootline {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bootbar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
 .cursor-field span {
   text-shadow:
     0 0 4px rgba(220, 220, 220, 0.5),

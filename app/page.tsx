@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import TerminalBlock from "@/components/terminal-block";
-import TerminalTitle from "@/components/terminal-title";
+import HomeHero from "@/components/home-hero";
 
 async function getTable(table: string): Promise<unknown[]> {
   try {
@@ -31,15 +31,7 @@ export default async function Page() {
       {/* First fold - fullscreen */}
       <section className="relative min-h-screen w-full flex flex-col">
         {/* Header */}
-        <header className="w-full flex justify-between items-start px-6 sm:px-10 lg:px-12 pt-8 pb-4">
-          <TerminalTitle />
-          <a
-            href="/terminal"
-            className="text-lg sm:text-xl lg:text-2xl tracking-tight opacity-70 hover:opacity-100 transition-opacity duration-300 mt-2"
-          >
-            [ terminal ]
-          </a>
-        </header>
+        <HomeHero />
 
         {/* Hero - scroll prompt at bottom */}
         <div className="flex-1 w-full flex flex-col items-center justify-end pb-16">

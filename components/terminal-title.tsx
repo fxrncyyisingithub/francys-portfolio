@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 
 const TEXT = "francy's portfolio";
 
-export default function TerminalTitle() {
+export default function TerminalTitle({ start = true }: { start?: boolean }) {
   const [shown, setShown] = useState("");
   const [done, setDone] = useState(false);
 
   useEffect(() => {
+    if (!start) return;
     let i = 0;
     const id = setInterval(() => {
       i += 1;
@@ -19,7 +20,7 @@ export default function TerminalTitle() {
       }
     }, 75);
     return () => clearInterval(id);
-  }, []);
+  }, [start]);
 
   return (
     <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-none">
