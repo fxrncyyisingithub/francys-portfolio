@@ -4,6 +4,10 @@ import "./globals.css";
 import SmoothScroll from "@/components/lenis";
 import CursorTrail from "@/components/cursor-trail";
 
+type RootLayoutProps = Readonly<{
+  children: React.ReactNode;
+}>;
+
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -39,7 +43,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: RootLayoutProps) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
