@@ -1,18 +1,28 @@
 version: 2
+
 updates:
-  # bun dependencies
-  - package-ecosystem: "bun"
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "daily"
+
     open-pull-requests-limit: 10
+
     reviewers:
       - "fxrncyyisingithub"
+
     allow:
       - dependency-type: "all"
+
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
+
     commit-message:
       prefix: "chore"
       prefix-development: "chore"
       include: "scope"
+
     pull-request-branch-name:
       separator: "/"
